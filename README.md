@@ -1,6 +1,6 @@
 # SmartScraper: 简单、自动、快捷的Python网络爬虫
 
-**Note: **The origin developer of SmartScraper  is **Alireza Mika**， I only change a little code of AutoScraper.
+**Note**:  The origin developer of SmartScraper  is **Alireza Mika**， I only change a little code of AutoScraper.
 
 
 
@@ -111,7 +111,7 @@ scraper.load('douban_Book.pkl')
 感兴趣的童鞋不妨 戳一下[《python网络爬虫与文本数据分析》](https://ke.qq.com/course/482241?tuin=163164df)进来看看~
 [![](img/课程.png)](https://ke.qq.com/course/482241?tuin=163164df)
 
-
+<br><br>
 
 ### 3.3 自媒体
 
