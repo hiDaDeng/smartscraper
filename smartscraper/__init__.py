@@ -1,0 +1,1 @@
+from smartscraper.smart_scraper import SmartScraper
