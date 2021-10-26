@@ -3,7 +3,7 @@ import json
 from collections import defaultdict
 from html import unescape
 from urllib.parse import urljoin, urlparse
-
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
@@ -48,50 +48,27 @@ class SmartScraper(object):
             (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36"
     }
 
-    def __init__(self, stack_list=None):
+    def __init__(self,stack_list=None):
         self.stack_list = stack_list or []
+        self.save_df = None
 
     def save(self, file_path):
         """
-        Serializes the stack_list as JSON and saves it to the disk.
+        每次运行get_result_similar或build时，可结合save函数，将获取的数据存储到csv中
 
         Parameters
         ----------
         file_path: str
-            Path of the JSON output
+            Path of the CSV output
 
         Returns
         -------
         None
         """
 
-        data = dict(stack_list=self.stack_list)
-        with open(file_path, "w") as f:
-            json.dump(data, f)
+        self.save_df.to_csv(file_path, mode='a+', index=False)
 
-    def load(self, file_path):
-        """
-        De-serializes the JSON representation of the stack_list and loads it back.
 
-        Parameters
-        ----------
-        file_path: str
-            Path of the JSON file to load stack_list from.
-
-        Returns
-        -------
-        None
-        """
-
-        with open(file_path, "r") as f:
-            data = json.load(f)
-
-        # for backward compatibility
-        if isinstance(data, list):
-            self.stack_list = data
-            return
-
-        self.stack_list = data["stack_list"]
 
     @classmethod
     def _fetch_html(cls, url, request_args=None):
@@ -256,6 +233,8 @@ class SmartScraper(object):
 
 
         self.stack_list = unique_stack_list(self.stack_list)
+
+        self.save_df = pd.DataFrame(result_dict)
         return result_dict
 
     @classmethod
