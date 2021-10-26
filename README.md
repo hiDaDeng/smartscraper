@@ -1,6 +1,6 @@
 # SmartScraper: 简单、自动、快捷的Python网络爬虫
 
-**Note**:  The origin developer of SmartScraper  is **Alireza Mika**， I only change a little code of AutoScraper.
+**Note**: The origin developer of SmartScraper  is **Alireza Mika**， I only change a little code of AutoScraper.
 
 
 
@@ -48,6 +48,7 @@ print(results)
 ```
 
 运行代码，采集到的results如下
+
 ```python
 {'title': ['活着', 
            '房思琪的初恋乐园', 
@@ -64,14 +65,28 @@ print(results)
 }
 
 ```
+
 使用刚刚训练的scraper尝试从 **P2链接** 获取书名和出版信息
+
 ```python
 scraper.get_result_similar('https://book.douban.com/tag/小说?start=20&type=T')
 ```
 
 <br>
 
-### 2.2 保存模型
+
+
+### 2.2 保存数据
+
+每次运行方法``get_result_similar``后可结合save一起使用，数据将以**追加**形式存入 **csv**中。
+
+```python
+scraper.save(file_path='data.csv')
+```
+
+
+
+### 2.3 保存模型
 
 训练的smartscraper模型可以保存，后续直接调用
 
@@ -87,9 +102,45 @@ scraper.load('douban_Book.pkl')
 
 <br><br>
 
-## 三、其他
+## 三、完整代码
 
-### 3.1 项目补充说明
+假设我们要采集豆瓣小说前10页的所有数据，代码如下
+
+```python
+from smartscraper import SmartScraper
+
+
+# 网址规律
+template = 'https://book.douban.com/tag/小说?start={param}&type=T'
+
+
+# 待训练的网页链接
+train_url = template.format(param=0)
+#定义 想要的字段
+wanted_dict = {"title":["活着"],
+               "pub": ["余华 / 作家出版社 / 2012-8-1 / 20.00元"]}
+# 训练/在url对应的页面中寻找wanted_dict规律
+scraper = SmartScraper()
+scraper.build(train_url, wanted_dict=wanted_dict)
+
+
+
+# 批量采集&存储
+for pn in range(1, 11):
+  url = template.format(param=(pn-1)*20)
+	scraper.get_result_similar(url)
+	scraper.save(file_path='data.csv')
+
+
+```
+
+
+
+<br><br>
+
+## 四、其他
+
+### 4.1 项目补充说明
 
 - SmartScraper仅为了简化使用，对AutoScraper进行了小修改（几行代码）
 
@@ -97,7 +148,7 @@ scraper.load('douban_Book.pkl')
 
 <br><br>
 
-###  3.2 相关课程
+###  4.2 相关课程
 
 如果您是经管人文社科专业背景，编程小白，面临海量文本数据采集和处理分析艰巨任务，个人建议学习[《python网络爬虫与文本数据分析》](https://ke.qq.com/course/482241?tuin=163164df)视频课。作为文科生，一样也是从两眼一抹黑开始，这门课程是用五年时间凝缩出来的。自认为讲的很通俗易懂o(*￣︶￣*)o，
 
@@ -111,11 +162,12 @@ scraper.load('douban_Book.pkl')
 感兴趣的童鞋不妨 戳一下[《python网络爬虫与文本数据分析》](https://ke.qq.com/course/482241?tuin=163164df)进来看看~
 [![](img/课程.png)](https://ke.qq.com/course/482241?tuin=163164df)
 
-<br><br>
 
-### 3.3 自媒体
+
+### 4.3 自媒体
 
 - [B站:大邓和他的python](https://space.bilibili.com/122592901/channel/detail?cid=66008)
+
 - **公众号：大邓和他的python**
 
   
